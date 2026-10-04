@@ -1,0 +1,25 @@
+# .gitignore
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# IDE files
+.vscode/
+.idea/
+
+# Operating system artifacts
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# SQLite temporary journals
+*.db-journal
+*.sqlite3-journal

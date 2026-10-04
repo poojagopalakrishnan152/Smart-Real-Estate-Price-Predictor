@@ -1,0 +1,9 @@
+# requirements.txt
+# Dependencies for Smart Real Estate Price Predictor – Bengaluru
+# Install using: pip install -r requirements.txt
+
+Flask>=3.0.0
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+joblib>=1.3.0

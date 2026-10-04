@@ -1,0 +1,119 @@
+<!-- templates/about.html -->
+{% extends "base.html" %}
+
+{% block title %}About – Smart Real Estate Price Predictor{% endblock %}
+
+{% block content %}
+<div class="card" style="margin-bottom: 2rem;">
+  <div class="hero-badge" style="margin-bottom: 0.5rem;">📖 Project Documentation</div>
+  <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.02em; margin-bottom: 0.75rem;">
+    About Smart Real Estate Price Predictor
+  </h1>
+  <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.6; max-width: 900px;">
+    An applied Machine Learning and Full-Stack web application designed to predict residential property prices across Bengaluru, Karnataka, using pure geographic, spatial, and surrounding environmental features.
+  </p>
+</div>
+
+<div class="features-grid" style="margin-bottom: 2rem;">
+  <!-- Project Purpose -->
+  <div class="feature-box">
+    <div class="feature-icon-badge">🎯</div>
+    <h3>Core Objective</h3>
+    <p>
+      Provide home buyers, real estate developers, and urban analysts with reliable, data-backed property price estimations based on neighborhood infrastructure, location density, and construction area classification.
+    </p>
+  </div>
+
+  <!-- Kaggle Dataset -->
+  <div class="feature-box">
+    <div class="feature-icon-badge">📊</div>
+    <h3>Bengaluru Dataset</h3>
+    <p>
+      Trained on the comprehensive <strong>Bengaluru House Data</strong> dataset from Kaggle containing over 13,300 transaction listings across 240+ verified Bengaluru localities.
+    </p>
+  </div>
+
+  <!-- Full Stack Tech -->
+  <div class="feature-box">
+    <div class="feature-icon-badge">💻</div>
+    <h3>Technology Stack</h3>
+    <p>
+      Built cleanly with <strong>Python 3, Flask, Scikit-Learn, Pandas, NumPy, SQLite, HTML5, CSS3, JavaScript</strong>, and <strong>Chart.js</strong> without unnecessary complex framework overhead.
+    </p>
+  </div>
+</div>
+
+<!-- Special Architecture Note: Why Exclude Bedrooms and Bathrooms -->
+<div class="card" style="border-left: 5px solid var(--accent-teal); margin-bottom: 2.5rem;">
+  <div class="card-header">
+    <div class="hero-badge" style="background-color: #f0fdfa; color: var(--accent-teal-dark); border-color: #99f6e4;">
+      Key Architectural Choice
+    </div>
+    <h2 class="card-title">Why Bedroom & Bathroom Features Are Excluded</h2>
+  </div>
+  
+  <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1rem;">
+    Most conventional housing price predictors rely heavily on room counts (1 BHK, 2 BHK, 3 BHK, bathroom counts). However, in a dynamic metropolis like Bengaluru, <strong>land value, commercial IT cluster proximity, and neighborhood infrastructure dictate the fundamental asset valuation</strong>.
+  </p>
+
+  <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1rem;">
+    By intentionally eliminating <code>size</code> (BHK), <code>bath</code>, and <code>balcony</code> columns during preprocessing, this project demonstrates:
+  </p>
+
+  <ul style="list-style-position: inside; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.8; margin-left: 0.5rem;">
+    <li><strong>Location-First Valuation:</strong> How geographical placement in tech hubs (e.g. Whitefield, Indiranagar, Electronic City) creates premium value independent of internal layout.</li>
+    <li><strong>Area Classification Impact:</strong> How Plot Area vs. Super built-up Area vs. Carpet Area reflects varying land-to-structure proportions.</li>
+    <li><strong>Density & Community Metrics:</strong> Leveraging locality listing frequencies and gated society infrastructure to quantify neighborhood demand.</li>
+    <li><strong>Pure Environmental Signals:</strong> Preventing the regression model from relying on room count heuristics that mask true location-based pricing disparities.</li>
+  </ul>
+</div>
+
+<!-- Machine Learning Methodology -->
+<div class="card" style="margin-bottom: 2.5rem;">
+  <div class="card-header">
+    <h2 class="card-title">Machine Learning Methodology</h2>
+    <p class="card-subtitle">End-to-end pipeline ensuring high generalization and zero data leakage.</p>
+  </div>
+
+  <div class="features-grid" style="margin-bottom: 0;">
+    <div style="background: #f8fafc; padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+      <h4 style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">1. Data Preprocessing</h4>
+      <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+        Converts non-standard square footage (ranges like "1200 - 1400", unit conversions for Sq. Meters, Sq. Yards, Acres), removes duplicates, standardizes locality names, and filters extreme outliers.
+      </p>
+    </div>
+
+    <div style="background: #f8fafc; padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+      <h4 style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">2. Feature Engineering</h4>
+      <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+        Derives locality frequency (transaction density), standardizes availability schedules into 3 clear business categories, and encodes gated society presence.
+      </p>
+    </div>
+
+    <div style="background: #f8fafc; padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+      <h4 style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">3. Model Benchmarking</h4>
+      <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+        Compares Linear Regression, Regularized Ridge, and Random Forest Regressors on an 80/20 train-test split using scikit-learn Pipelines and ColumnTransformers.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Developer Information & PBL Context -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">Academic & Project Context</h2>
+    <p class="card-subtitle">Demonstration for B.Tech Information Technology Machine Learning Project-Based Learning.</p>
+  </div>
+
+  <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+    Developed as an educational demonstration of applied machine learning, production deployment with Flask, and clean engineering practices in Visual Studio Code on Windows. All data visualizations and model evaluations reflect actual empirical metrics calculated from the Kaggle Bengaluru housing records.
+  </p>
+
+  <div style="margin-top: 1.5rem;">
+    <a href="{{ url_for('predict') }}" class="btn btn-primary">
+      🚀 Try the Price Predictor
+    </a>
+  </div>
+</div>
+{% endblock %}

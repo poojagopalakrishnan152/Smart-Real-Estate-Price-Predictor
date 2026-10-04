@@ -1,0 +1,265 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+
+{% block title %}Smart Real Estate Price Predictor – Bengaluru{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">📍 Bengaluru Real Estate Intelligence</div>
+    <h1>SMART REAL ESTATE PRICE PREDICTOR</h1>
+    <p class="hero-subtitle">
+      Predict Bengaluru Property Prices Using Location and Property Surrounding Details. Powered by regression algorithms trained on authentic Bengaluru housing records.
+    </p>
+    <div class="hero-actions">
+      <a href="{{ url_for('predict') }}" class="btn btn-primary">
+        🚀 Estimate Property Price
+      </a>
+      <a href="#analytics" class="btn btn-secondary">
+        📊 Explore Market Analytics
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- KPI / Metric Cards -->
+<section class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon teal">🏢</div>
+    <div>
+      <div class="stat-value">{{ summary.total_properties | default(12574) }}</div>
+      <div class="stat-label">Properties Analyzed</div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon blue">📍</div>
+    <div>
+      <div class="stat-value">{{ summary.unique_locations | default(246) }}</div>
+      <div class="stat-label">Bengaluru Localities</div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon emerald">₹</div>
+    <div>
+      <div class="stat-value">₹ {{ summary.avg_price_lakhs | default(112.32) }} L</div>
+      <div class="stat-label">Average Property Price</div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon gold">🎯</div>
+    <div>
+      <div class="stat-value">{{ metrics.r2_score | default(62.71) }}%</div>
+      <div class="stat-label">Best Model R² Score</div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section style="margin-bottom: 3.5rem;">
+  <div class="section-title-wrap">
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-subtitle">Predicting property values based strictly on geographic positioning and surrounding infrastructural metrics.</p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-box">
+      <div class="feature-icon-badge">1</div>
+      <h3>Select Bengaluru Locality</h3>
+      <p>Choose from over 240+ verified Bengaluru neighborhoods such as Whitefield, Electronic City, Indira Nagar, Koramangala, and HSR Layout.</p>
+    </div>
+
+    <div class="feature-box">
+      <div class="feature-icon-badge">2</div>
+      <h3>Input Property Area & Type</h3>
+      <p>Specify the total square footage and area classification (Super built-up, Built-up, Plot, or Carpet area) alongside availability schedule.</p>
+    </div>
+
+    <div class="feature-box">
+      <div class="feature-icon-badge">3</div>
+      <h3>Instant ML Valuation</h3>
+      <p>Our scikit-learn regression model factors in locality density, area classification, and society presence to compute a realistic price valuation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Key Project Features Section -->
+<section style="margin-bottom: 3.5rem;">
+  <div class="section-title-wrap">
+    <h2 class="section-title">Why Location & Surroundings Matter</h2>
+    <p class="section-subtitle">
+      Real estate value in Bengaluru is predominantly driven by location prestige, IT corridor connectivity, and community development rather than internal room configurations.
+    </p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-box">
+      <div class="feature-icon-badge">🌐</div>
+      <h3>Location Clustering & Density</h3>
+      <p>Localities with high commercial density and tech park proximity naturally command distinct price per square foot valuations.</p>
+    </div>
+
+    <div class="feature-box">
+      <div class="feature-icon-badge">🏗️</div>
+      <h3>Area Classification Weighting</h3>
+      <p>Plot areas, super built-up spaces, and carpet areas carry different land-to-structure ratios that significantly influence overall property price.</p>
+    </div>
+
+    <div class="feature-box">
+      <div class="feature-icon-badge">🛡️</div>
+      <h3>Society & Gated Infrastructure</h3>
+      <p>Properties within established societies and integrated gated communities reflect security premiums and infrastructure advantages.</p>
+    </div>
+
+    <div class="feature-box">
+      <div class="feature-icon-badge">🚫</div>
+      <h3>Zero Bedroom/BHK Dependency</h3>
+      <p>Strictly excludes bedroom, bathroom, and balcony counts to provide pure location-based and area-based pricing predictions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Interactive Real Estate Analytics Dashboard -->
+<section id="analytics" style="margin-bottom: 3.5rem;">
+  <div class="section-title-wrap">
+    <h2 class="section-title">Bengaluru Market Analytics</h2>
+    <p class="section-subtitle">Visual analysis generated directly from 12,000+ authentic Bengaluru property records.</p>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="card-header">
+        <h3 class="card-title">Top Localities by Average Price</h3>
+        <p class="card-subtitle">Localities commanding highest average valuation (min. 15 dataset records)</p>
+      </div>
+      <div class="chart-wrapper">
+        <canvas id="priceByLocationChart"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="card-header">
+        <h3 class="card-title">Property Area Type Distribution</h3>
+        <p class="card-subtitle">Breakdown of listings by construction area classification</p>
+      </div>
+      <div class="chart-wrapper">
+        <canvas id="areaTypeChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 1rem;">
+    <div class="card-header">
+      <h3 class="card-title">Most Active Localities by Listing Density</h3>
+      <p class="card-subtitle">Bengaluru neighborhoods with the highest concentration of analyzed properties</p>
+    </div>
+    <div class="chart-wrapper" style="height: 350px;">
+      <canvas id="countByLocationChart"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- Model Performance & Evaluation Section -->
+<section id="models" style="margin-bottom: 3.5rem;">
+  <div class="card">
+    <div class="card-header">
+      <div class="hero-badge" style="margin-bottom: 0.5rem;">🧪 Rigorous Machine Learning Evaluation</div>
+      <h2 class="card-title">Model Performance & Benchmarking</h2>
+      <p class="card-subtitle">
+        Comparison of candidate regression models on the 20% hold-out test set (2,515 unseen properties). All models strictly adhere to the bedroom/bathroom-independent rule.
+      </p>
+    </div>
+
+    <div class="table-container">
+      <table class="model-table">
+        <thead>
+          <tr>
+            <th>Model Algorithm</th>
+            <th>R² Score</th>
+            <th>Mean Absolute Error (MAE)</th>
+            <th>Root Mean Squared Error (RMSE)</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if all_models %}
+            {% for name, m in all_models.items() %}
+              <tr>
+                <td>
+                  <strong>{{ name }}</strong>
+                  {% if name == best_model %}
+                    <span class="model-badge-winner">BEST PERFORMER</span>
+                  {% endif %}
+                </td>
+                <td><strong>{{ m.r2_score }}%</strong></td>
+                <td>₹ {{ m.mae }} Lakhs</td>
+                <td>₹ {{ m.rmse }} Lakhs</td>
+                <td>
+                  {% if name == best_model %}
+                    <span style="color: #166534; font-weight: 600;">Active in Production</span>
+                  {% else %}
+                    <span style="color: #64748b;">Benchmark</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td>Linear Regression</td>
+              <td>62.71%</td>
+              <td>₹ 41.05 Lakhs</td>
+              <td>₹ 103.78 Lakhs</td>
+              <td><span class="model-badge-winner">BEST PERFORMER</span></td>
+            </tr>
+            <tr>
+              <td>Ridge Regression</td>
+              <td>62.36%</td>
+              <td>₹ 41.02 Lakhs</td>
+              <td>₹ 104.27 Lakhs</td>
+              <td><span style="color: #64748b;">Benchmark</span></td>
+            </tr>
+            <tr>
+              <td>Random Forest Regressor</td>
+              <td>61.55%</td>
+              <td>₹ 36.63 Lakhs</td>
+              <td>₹ 105.38 Lakhs</td>
+              <td><span style="color: #64748b;">Benchmark</span></td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top: 1.5rem; padding: 1rem 1.25rem; background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border-light); font-size: 0.9rem; color: var(--text-secondary);">
+      <strong>Honest Accuracy Standard:</strong> R² score is computed on genuine Kaggle data without synthetic exaggeration. Given that room counts and floor levels are intentionally omitted to isolate pure location dynamics, the model captures ~63% of overall price variance across the city.
+    </div>
+  </div>
+</section>
+
+<!-- Supported Bengaluru Localities Section -->
+<section style="margin-bottom: 2rem;">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Featured Bengaluru Localities</h3>
+      <p class="card-subtitle">Click on any neighborhood to begin price estimation:</p>
+    </div>
+
+    <div class="location-tags-cloud">
+      {% for loc in locations %}
+        <a href="{{ url_for('predict') }}?location={{ loc }}" class="location-tag">
+          📍 {{ loc }}
+        </a>
+      {% endfor %}
+    </div>
+
+    <div style="margin-top: 1.5rem; text-align: right;">
+      <a href="{{ url_for('predict') }}" class="btn btn-primary">
+        View All 240+ Localities in Predictor &rarr;
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

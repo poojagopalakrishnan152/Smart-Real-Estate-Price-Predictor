@@ -1,0 +1,110 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Smart Real Estate Price Predictor – Bengaluru{% endblock %}</title>
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Chart.js for Interactive Visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('index') }}" class="nav-brand">
+        <div class="brand-icon">🏛️</div>
+        <span>Smart Estate <span style="color: var(--accent-teal-light);">Bengaluru</span></span>
+      </a>
+
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">☰</button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">Home</a></li>
+        <li><a href="{{ url_for('index') }}#analytics" class="nav-link">Analytics</a></li>
+        <li><a href="{{ url_for('index') }}#models" class="nav-link">Model Performance</a></li>
+        <li><a href="{{ url_for('history') }}" class="nav-link {% if request.endpoint == 'history' %}active{% endif %}">History</a></li>
+        <li><a href="{{ url_for('about') }}" class="nav-link {% if request.endpoint == 'about' %}active{% endif %}">About</a></li>
+        <li><a href="{{ url_for('predict') }}" class="nav-link nav-cta">Predict Price</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Flash Messages -->
+  <div class="main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="alert-container">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+              <span>{{ message }}</span>
+              <button class="alert-close" type="button">&times;</button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Main Dynamic Content Block -->
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- Loading Animation Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Analyzing Bengaluru real estate data...</div>
+    <div class="loading-subtext">Evaluating location density, area type, and surrounding patterns</div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <h3>Smart Real Estate Price Predictor</h3>
+        <p>A machine learning web application estimating Bengaluru property valuations based primarily on location and surrounding place characteristics.</p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #64748b;">
+          *Strictly bedroom/bathroom-independent valuation methodology.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="footer-title">Navigation</h4>
+        <ul class="footer-links">
+          <li><a href="{{ url_for('index') }}">Home Dashboard</a></li>
+          <li><a href="{{ url_for('predict') }}">Estimate Property Price</a></li>
+          <li><a href="{{ url_for('history') }}">Prediction History</a></li>
+          <li><a href="{{ url_for('about') }}">ML Architecture & Dataset</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-title">Technology Stack</h4>
+        <ul class="footer-links">
+          <li>Python 3 & Flask</li>
+          <li>Scikit-Learn Machine Learning</li>
+          <li>Pandas & NumPy Data Processing</li>
+          <li>SQLite Database Storage</li>
+          <li>Chart.js Interactive Analytics</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 Smart Real Estate Price Predictor – Bengaluru. Built for B.Tech Machine Learning Project.</p>
+    </div>
+  </footer>
+
+  <!-- Custom JavaScript -->
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

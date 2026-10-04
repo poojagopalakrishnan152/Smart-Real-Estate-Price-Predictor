@@ -1,0 +1,87 @@
+<!-- templates/result.html -->
+{% extends "base.html" %}
+
+{% block title %}Property Valuation Result – Smart Real Estate Predictor{% endblock %}
+
+{% block content %}
+<div class="result-card">
+  <!-- Header with Prominent Price -->
+  <div class="result-header">
+    <div class="result-badge">✨ Machine Learning Valuation Result</div>
+    <div style="font-size: 1.1rem; color: #cbd5e1; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">
+      Estimated Bengaluru Property Price
+    </div>
+    <div class="result-price">
+      {{ result.formatted_price }}
+    </div>
+    <div class="result-sqft-rate">
+      Equivalent to approx. <strong>₹ {{ "{:,.2f}".format(result.price_per_sqft) }}</strong> per sq.ft.
+    </div>
+  </div>
+
+  <div class="result-body">
+    <!-- Property Details Summary Grid -->
+    <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary);">
+      Property Valuation Parameters
+    </h3>
+
+    <div class="detail-grid">
+      <div class="detail-item">
+        <div class="detail-label">Bengaluru Location</div>
+        <div class="detail-value">📍 {{ result.location }}</div>
+      </div>
+
+      <div class="detail-item">
+        <div class="detail-label">Total Area</div>
+        <div class="detail-value">📐 {{ result.total_sqft }} sq.ft.</div>
+      </div>
+
+      <div class="detail-item">
+        <div class="detail-label">Area Classification</div>
+        <div class="detail-value">🏗️ {{ result.area_type }}</div>
+      </div>
+
+      <div class="detail-item">
+        <div class="detail-label">Availability Schedule</div>
+        <div class="detail-value">📅 {{ result.availability }}</div>
+      </div>
+
+      <div class="detail-item" style="grid-column: 1 / -1;">
+        <div class="detail-label">Community / Society Infrastructure</div>
+        <div class="detail-value">🛡️ {{ result.society_display }}</div>
+      </div>
+    </div>
+
+    <!-- Surrounding Details & Locality Insight -->
+    <div style="background-color: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1.25rem; margin-bottom: 1.75rem;">
+      <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
+        📍 Locality & Surrounding Dynamics Analysis:
+      </h4>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+        This prediction for <strong>{{ result.location }}</strong> incorporates historical transactions from <strong>{{ result.location_frequency }}</strong> recorded properties in this vicinity. Property valuation is synthesized strictly through location market density, <strong>{{ result.area_type }}</strong> construction efficiency, and community amenities.
+      </p>
+    </div>
+
+    <!-- Model Confidence & Methodology Note -->
+    <div class="confidence-box">
+      <div style="font-size: 1.5rem;">ℹ️</div>
+      <div>
+        <strong>Model Methodology:</strong> Estimated using the trained Bengaluru real estate regression model (<strong>{{ result.model_name }}</strong>). Room and washroom specifications are deliberately omitted to preserve a clean location-surroundings focus.
+      </div>
+    </div>
+
+    <!-- Navigation / Next Steps Actions -->
+    <div class="result-actions">
+      <a href="{{ url_for('predict') }}" class="btn btn-primary">
+        🔄 Predict Another Property
+      </a>
+      <a href="{{ url_for('history') }}" class="btn btn-secondary" style="background-color: var(--secondary-navy); border-color: var(--secondary-navy);">
+        📜 View Prediction History
+      </a>
+      <a href="{{ url_for('index') }}" class="btn btn-outline">
+        🏠 Back to Home Dashboard
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

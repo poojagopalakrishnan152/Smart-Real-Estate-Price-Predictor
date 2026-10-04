@@ -1,0 +1,139 @@
+<!-- templates/predict.html -->
+{% extends "base.html" %}
+
+{% block title %}Estimate Property Price – Smart Real Estate Predictor{% endblock %}
+
+{% block content %}
+<div class="form-card">
+  <div style="text-align: center; margin-bottom: 2rem;">
+    <div class="hero-badge" style="margin-bottom: 0.5rem;">🤖 Machine Learning Valuation</div>
+    <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.02em;">
+      Estimate Your Property Price
+    </h1>
+    <p style="color: var(--text-secondary); font-size: 1rem; margin-top: 0.5rem;">
+      Enter property area and surrounding details to generate an instant Bengaluru real estate valuation.
+    </p>
+  </div>
+
+  {% if not model_ready %}
+    <div class="alert alert-danger">
+      <strong>Model Not Loaded:</strong> The ML model files were not detected. Please execute <code>python train_model.py</code> in your project directory first.
+    </div>
+  {% else %}
+    <form id="predictForm" method="POST" action="{{ url_for('predict') }}">
+      
+      <!-- 1. Location Selection -->
+      <div class="form-group">
+        <label for="locationSelect" class="form-label">
+          Bengaluru Location <span class="req">*</span>
+        </label>
+        <select class="form-select" id="locationSelect" name="location" required>
+          <option value="" disabled {% if not request.args.get('location') and not form_data %}selected{% endif %}>
+            -- Select Bengaluru Location ({{ locations | length }} available) --
+          </option>
+          {% for loc in locations %}
+            <option value="{{ loc }}" {% if (request.args.get('location') == loc) or (form_data and form_data.get('location') == loc) %}selected{% endif %}>
+              {{ loc }}
+            </option>
+          {% endfor %}
+        </select>
+        <div class="form-hint">Only locations present in the authentic Bengaluru real estate dataset are supported.</div>
+      </div>
+
+      <!-- Quick Location Tags -->
+      <div class="form-group" style="margin-top: -0.5rem; margin-bottom: 1.5rem;">
+        <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.35rem;">Popular Localities:</div>
+        <div class="location-tags-cloud" style="gap: 0.35rem;">
+          {% for quick_loc in ['Whitefield', 'Electronic City', 'Indira Nagar', 'Koramangala', 'HSR Layout', 'Hebbal', 'Yelahanka', 'Marathahalli', 'Sarjapur  Road', 'Thanisandra'] %}
+            {% if quick_loc in locations %}
+              <span class="location-tag" data-location="{{ quick_loc }}" style="cursor: pointer; font-size: 0.75rem; padding: 0.25rem 0.6rem;">
+                {{ quick_loc }}
+              </span>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- 2. Total Area in Sq.Ft. -->
+      <div class="form-group">
+        <label for="totalSqft" class="form-label">
+          Total Area (Square Feet) <span class="req">*</span>
+        </label>
+        <input 
+          type="number" 
+          step="any" 
+          min="100" 
+          max="50000" 
+          class="form-control" 
+          id="totalSqft" 
+          name="total_sqft" 
+          placeholder="e.g. 1200" 
+          value="{{ form_data.get('total_sqft', '') if form_data else '' }}"
+          required
+        >
+        <div class="form-hint">Total built-up or plot area in sq.ft. (Recommended range: 250 - 15,000 sq.ft.)</div>
+      </div>
+
+      <!-- 3. Area Type -->
+      <div class="form-group">
+        <label for="areaTypeSelect" class="form-label">
+          Area Type Classification <span class="req">*</span>
+        </label>
+        <select class="form-select" id="areaTypeSelect" name="area_type" required>
+          {% for at in area_types %}
+            <option value="{{ at }}" {% if form_data and form_data.get('area_type') == at %}selected{% elif loop.first and not form_data %}selected{% endif %}>
+              {{ at }}
+            </option>
+          {% endfor %}
+        </select>
+        <div class="form-hint">Construction format classification directly impacts base land-to-structure valuation.</div>
+      </div>
+
+      <!-- 4. Availability Status -->
+      <div class="form-group">
+        <label for="availabilitySelect" class="form-label">
+          Availability / Possession Schedule <span class="req">*</span>
+        </label>
+        <select class="form-select" id="availabilitySelect" name="availability" required>
+          {% for av in availabilities %}
+            <option value="{{ av }}" {% if (form_data and form_data.get('availability') == av) or (av == 'Ready To Move' and not form_data) %}selected{% endif %}>
+              {{ av }}
+            </option>
+          {% endfor %}
+        </select>
+        <div class="form-hint">Possession readiness influences market liquidity and developer pricing.</div>
+      </div>
+
+      <!-- 5. Society / Gated Community Status -->
+      <div class="form-group">
+        <label class="form-label">Society / Gated Community Details</label>
+        <label class="form-check-group" for="societyPresenceCheck">
+          <input 
+            type="checkbox" 
+            class="form-check-input" 
+            id="societyPresenceCheck" 
+            name="society_presence" 
+            value="1"
+            {% if form_data and form_data.get('society_presence') == '1' %}checked{% else %}checked{% endif %}
+          >
+          <span class="form-check-label">
+            Property is situated within a Registered Society / Gated Community
+          </span>
+        </label>
+        <div class="form-hint">Community infrastructure, security, and common amenities provide positive valuation uplift.</div>
+      </div>
+
+      <!-- Strict Rule Notice Callout -->
+      <div style="background-color: #f8fafc; border-left: 4px solid var(--accent-teal); padding: 0.85rem 1.25rem; border-radius: var(--radius-sm); margin-bottom: 2rem; font-size: 0.85rem; color: var(--text-secondary);">
+        <strong>Surroundings & Location Valuation Principle:</strong> This application focuses on location density, neighborhood infrastructure, area classification, and community presence. Bedroom, bathroom, and balcony counts are intentionally omitted from estimation features.
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary btn-block" style="padding: 1rem; font-size: 1.1rem;">
+        🚀 PREDICT PROPERTY PRICE
+      </button>
+
+    </form>
+  {% endif %}
+</div>
+{% endblock %}
